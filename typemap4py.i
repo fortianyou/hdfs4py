@@ -1,5 +1,7 @@
 %include "carrays.i"
-%array_class(byte, buffer);
+%array_class(unsigned char, buffer);
+%include "cdata.i"
+%cdata(unsigned char, buffer);
 
 %typemap(in) (const char* path, int *numEntries) {
 //typemap
@@ -56,7 +58,6 @@
 //typemap
 }
 
-
 %typemap(in) ( char  *buffer, size_t bufferSize) {
 //typemap
     if (!PyInt_Check($input) ) {
@@ -65,47 +66,12 @@
     }
     $2 = PyInt_AsLong($input);
 
-    if ( $2 < 0 && PyErr_Occurred() ) {
+    if ( PyErr_Occurred() ) {
          PyErr_SetString( PyExc_ValueError, "Expecting positive integer");
          return NULL;
     }
 
     $1 = (char*) malloc($2*sizeof(char));
-//typemap
-}
-
-// typemap for an incoming buffer
-%typemap(in) (void *buffer, tSize length) {
-//typemap
-    //For reads
-    if (!PyInt_Check($input)) {
-         PyErr_SetString(PyExc_ValueError, "Expecting an integer");
-         return NULL;
-    }
-
-    $2 = PyInt_AsLong($input);
-
-    if ( $2 < 0 && PyErr_Occurred() ) {
-         PyErr_SetString( PyExc_ValueError, "Expecting positive integer");
-         return NULL;
-    }
-
-    $1 = (void*) malloc($2);
-//typemap
-}
-
-
-// Return the buffer.  Discarding any previous return result
-%typemap(argout) (void *buffer, tSize length) {
-//typemap
-    Py_XDECREF($result);   /* Blow away any previous result */
-    if (result < 0) {      /* Check for I/O error */
-        free($1);
-        PyErr_SetFromErrno(PyExc_IOError);
-        return NULL;
-    }
-    $result = PyString_FromStringAndSize($1,result);
-    free($1);
 //typemap
 }
 

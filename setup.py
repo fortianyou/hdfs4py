@@ -11,17 +11,17 @@ HDH=os.environ['HADOOP_HOME']
 headers = HDH + '/include'
 libs = HDH + '/lib/native'
 
-pyhdfs_module = Extension('_pyhdfs', 
-        sources = ['pyhdfs.i'],
+hdfs4py_module = Extension('_hdfs4py', 
+        sources = ['hdfs4py.i'],
         swig_opts=[ '-Wall',  '-DSWIGWORDLENGTH64' ,'-I'+headers, '-I/usr/include'],
         include_dirs=[headers],
         library_dirs=[libs],
         libraries=['hdfs'])
 
-setup( name = 'pyhdfs', 
+setup( name = 'hdfs4py', 
         version = '0.1', 
         author = 'SWIG',
         description =  """Simple swig example from docs""",
-        ext_modules = [pyhdfs_module],
-        py_modules = ["pyhdfs"]
+        ext_modules = [hdfs4py_module],
+        py_modules = ["hdfs4py"]
         )

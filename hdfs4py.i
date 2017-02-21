@@ -1,12 +1,12 @@
-%module pyhdfs
+%module hdfs4py
 
-%include "pytypemap.i"
+%include "typemap4py.i"
 %{
 #include "hdfs.h"
 %}
 
 %ignore hdfsTruncateFile(hdfsFS fs, const char* path, tOffset newlength);
-%include "pyhdfs.h"
+%include "hdfs4py.h"
 %include "stdint.i"
 
 %constant int O_RDONLY = O_RDONLY;

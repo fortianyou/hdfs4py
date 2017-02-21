@@ -1,4 +1,4 @@
-from pyhdfs import *
+from hdfs4py import *
 
 fs = hdfsConnect('default', 0 )
 hdfsFile = hdfsOpenFile( fs, '/tmp/testfile.txt', O_WRONLY | O_CREAT, 0, 0, 0 )

@@ -2,3 +2,6 @@ _pyhdfs.so
 /build/
 hs_err_pid339.log
 *.pyc
+hdfs4py.py
+hdfs4py_wrap.c
+_hdfs4py.so

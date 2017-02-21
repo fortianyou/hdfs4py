@@ -7,7 +7,7 @@ If you have any problem while using it, pls contact to yzcaijunjie@gmail.com
 
 """
 
-import pyhdfs
+import hdfs4py
 import cStringIO
 import re
 
@@ -48,7 +48,7 @@ class HadoopDFS:
             @rtype: hdfsFS
             @return: Returns a handle to the filesystem or NULL on error.
         """
-        hdfsFS = pyhdfs.hdfsConnectAsUser(namenode,port,user)
+        hdfsFS = hdfs4py.hdfsConnectAsUser(namenode,port,user)
         if hdfsFS == None:
             raise StandardError("Could not connect as %s" % user)
         return hdfsFS
@@ -67,7 +67,7 @@ class HadoopDFS:
             @rtype: hdfsFs
             @return: Returns a handle to the filesystem or raise error.
         """
-        hdfsFS = pyhdfs.hdfsConnect(namenode, port)
+        hdfsFS = hdfs4py.hdfsConnect(namenode, port)
         if hdfsFS == None:
             raise StandardError("Counld not connect to %s:%s" %(namenode, str(port)) )
         return hdfsFS
@@ -79,7 +79,7 @@ class HadoopDFS:
             @rtype: int
             @return Returns 0 on success, -1 on error.
         """
-        result = pyhdfs.hdfsDisconnect(self.hdfs)
+        result = hdfs4py.hdfsDisconnect(self.hdfs)
         self.hdfs = None
         del self
         return result
@@ -92,7 +92,7 @@ class HadoopDFS:
             @return Returns the raw-capacity; -1 on error.
 
         """
-        return pyhdfs.hdfsGetCapacity(self.hdfs)
+        return hdfs4py.hdfsGetCapacity(self.hdfs)
     
     def getUsed(self):
         """
@@ -101,7 +101,7 @@ class HadoopDFS:
             @rtype: int
             @return Returns the total-size; -1 on error
         """
-        return pyhdfs.hdfsGetUsed(self.hdfs)
+        return hdfs4py.hdfsGetUsed(self.hdfs)
         
     def getWorkingDirectory(self,length=255):
         """
@@ -113,7 +113,7 @@ class HadoopDFS:
             @rtype: string
             @return: Returns name of current working directory, NULL on error.
         """
-        pwd = pyhdfs.hdfsGetWorkingDirectory(self.hdfs,length)
+        pwd = hdfs4py.hdfsGetWorkingDirectory(self.hdfs,length)
         if pwd.startswith("hdfs://"):
             return re.split(":\d+",pwd)[1]
         else:
@@ -129,7 +129,7 @@ class HadoopDFS:
             @rtype: int
             @return: Returns 0 on success, -1 on error. 
         """
-        return pyhdfs.hdfsSetWorkingDirectory(self.hdfs,name)
+        return hdfs4py.hdfsSetWorkingDirectory(self.hdfs,name)
                              
     def createDirectory(self,name):
         """
@@ -141,7 +141,7 @@ class HadoopDFS:
             @rtype: int
             @return: Returns 0 on success, -1 on error. 
         """
-        return pyhdfs.hdfsCreateDirectory(self.hdfs,name)
+        return hdfs4py.hdfsCreateDirectory(self.hdfs,name)
     
     def copy(self,source,target,t_hadoopDFS=None):
         """
@@ -165,7 +165,7 @@ class HadoopDFS:
             t_hadoopDFS = self
         if not isinstance(t_hadoopDFS,HadoopDFS):
             raise TypeError("Target DFS must be a HadoopDFS")
-        return pyhdfs.hdfsCopy(self.hdfs,source,t_hadoopDFS.hdfs,target)
+        return hdfs4py.hdfsCopy(self.hdfs,source,t_hadoopDFS.hdfs,target)
     
     def move(self,source,target,t_hadoopDFS=None):
         """
@@ -188,7 +188,7 @@ class HadoopDFS:
             t_hadoopDFS = self
         if not isinstance(t_hadoopDFS,HadoopDFS):
             raise TypeError("Target DFS must be a HadoopDFS")
-        return pyhdfs.hdfsMove(self.hdfs,source,t_hadoopDFS.hdfs,target)
+        return hdfs4py.hdfsMove(self.hdfs,source,t_hadoopDFS.hdfs,target)
                                                                                  
     def delete(self,filename):
         """
@@ -202,7 +202,7 @@ class HadoopDFS:
         """
      #   if self.pathExists(filename)==-1:
      #       return -1
-        return pyhdfs.hdfsDelete(self.hdfs,filename)
+        return hdfs4py.hdfsDelete(self.hdfs,filename)
     
     def rename(self,old,new):
         """
@@ -218,7 +218,7 @@ class HadoopDFS:
         """
      #   if self.pathExists(old)==-1 or self.pathExists(new)==0:
      #       return -1
-        return pyhdfs.hdfsRename(self.hdfs,old,new)
+        return hdfs4py.hdfsRename(self.hdfs,old,new)
             
     def listDirectory(self,path):
         """
@@ -232,7 +232,7 @@ class HadoopDFS:
         """
         if self.pathExists(path) == -1 :
             return -1
-        return pyhdfs.hdfsListDirectory(self.hdfs,path)
+        return hdfs4py.hdfsListDirectory(self.hdfs,path)
         
 
     def pathExists(self,path):
@@ -245,7 +245,7 @@ class HadoopDFS:
             @rtype: int
             @return Returns 0 on success, -1 on error. 
         """
-        return pyhdfs.hdfsExists(self.hdfs,path)
+        return hdfs4py.hdfsExists(self.hdfs,path)
 
     def getDefaultBlockSize(self):
         """
@@ -254,7 +254,7 @@ class HadoopDFS:
             @rtype: int
             @return: Returns the blocksize (bytes); -1 on error. 
         """
-        return pyhdfs.hdfsGetDefaultBlockSize(self.hdfs)
+        return hdfs4py.hdfsGetDefaultBlockSize(self.hdfs)
 
 
     def chmod(self,path,mode):
@@ -271,7 +271,7 @@ class HadoopDFS:
         """
      #   if self.pathExists(path)==-1:
      #       return -1
-        return pyhdfs.hdfsChmod(self.hdfs,path,mode)
+        return hdfs4py.hdfsChmod(self.hdfs,path,mode)
 
     def chown(self,path,owner,group):
         """
@@ -289,7 +289,7 @@ class HadoopDFS:
         """
      #   if self.pathExists(path)==-1:
      #       return -1
-        return pyhdfs.hdfsChown(self.hdfs,path,owner,group)
+        return hdfs4py.hdfsChown(self.hdfs,path,owner,group)
 
     def getHosts(self,path,start,length):
         """
@@ -313,7 +313,7 @@ class HadoopDFS:
         """
         if self.pathExists(path)==-1:
             return -1
-        return pyhdfs.hdfsGetHosts(self.hdfs,path,start,length)
+        return hdfs4py.hdfsGetHosts(self.hdfs,path,start,length)
 
     def getPathInfo(self,path):
         """
@@ -327,7 +327,7 @@ class HadoopDFS:
         """
         if self.pathExists(path)==-1:
             return -1
-        pathInfo = pyhdfs.hdfsGetPathInfo(self.hdfs,path)
+        pathInfo = hdfs4py.hdfsGetPathInfo(self.hdfs,path)
         return pathInfo
 
     def setReplication(self,path,replication):
@@ -344,7 +344,7 @@ class HadoopDFS:
         """
         if self.pathExists(path)==-1:
             return -1
-        return pyhdfs.hdfsSetReplication(self.hdfs,path,replication)
+        return hdfs4py.hdfsSetReplication(self.hdfs,path,replication)
     
 class HadoopFile:
     """
@@ -356,18 +356,23 @@ class HadoopFile:
             raise TypeError( "First parameter must  be a HadoopDFS")
 
         if is_read==True:
-            mode = pyhdfs.O_RDONLY
+            mode = hdfs4py.O_RDONLY
         else:
-            mode = pyhdfs.O_WRONLY | pyhdfs.O_CREAT
+            mode = hdfs4py.O_WRONLY | hdfs4py.O_CREAT
         
-        self.filehandle = pyhdfs.hdfsOpenFile(hadoopdfs.hdfs,filename,mode,buffsize,replication,blocksize)
+        self.filehandle = hdfs4py.hdfsOpenFile(hadoopdfs.hdfs,filename,mode,buffsize,replication,blocksize)
         
         if self.filehandle==None:
             raise IOError("Could not open file")
         self.hdfs = hadoopdfs.hdfs
-        self.is_read = is_read
+        
+        self._is_read = is_read
+        self._buffersize = buffsize
 
-    def read(self,len=32*1024):
+        if self._is_read :
+            self._buf = hdfs4py.buffer(buffsize)
+
+    def read(self, buffsize = None):
         """
             Read data from an open file. 
 
@@ -383,13 +388,21 @@ class HadoopFile:
             >>> print fh.read()
             
         """
-        file_content = ''
         try:
-            file_content = pyhdfs.hdfsRead(self.hdfs,self.filehandle,len)
+            if buffsize == None or buffsize == self._buffersize :
+                buffsize = self._buffersize
+                buf = self._buf
+            else:
+                buf = hdfs4py.buffer(buffsize)
+
+            nbytes = hdfs4py.hdfsRead(self.hdfs,self.filehandle, buf, buffsize)
         except IOError,e:
             if file_content==None:
                 raise
-        return file_content
+        import numpy as np
+        arr = np.asarray( buf )
+        print "arr "+ str( arr )
+        return [nbytes, hdfs4py.cdata_buffer(buf, nbytes)]
 
     def close(self):
         """
@@ -398,7 +411,7 @@ class HadoopFile:
             @rtype: int
             @return: Returns 0 on success, -1 on error. 
         """
-        return pyhdfs.hdfsCloseFile(self.hdfs,self.filehandle)
+        return hdfs4py.hdfsCloseFile(self.hdfs,self.filehandle)
         
                            
     def readPos(self,pos,len=32*1024):
@@ -426,7 +439,7 @@ class HadoopFile:
             raise TypeError
         
         try:
-            file_content = pyhdfs.hdfsPread(self.hdfs,self.filehandle,pos,len)
+            file_content = hdfs4py.hdfsPread(self.hdfs,self.filehandle,pos,len)
         except IOError,e:
             if file_content==None:
                 raise
@@ -452,7 +465,7 @@ class HadoopFile:
             B{Be careful}, you must close the file after writing data into file, or the data will not flush into the file(even use flush()).
             
         """
-        return pyhdfs.hdfsWrite(self.hdfs,self.filehandle,data)
+        return hdfs4py.hdfsWrite(self.hdfs,self.filehandle,data)
         
 
     def flush(self):                                           
@@ -462,7 +475,7 @@ class HadoopFile:
             @rtype: int
             @return: Returns the number of bytes written, -1 on error.
         """
-        return pyhdfs.hdfsFlush(self.hdfs,self.filehandle)
+        return hdfs4py.hdfsFlush(self.hdfs,self.filehandle)
 
     def seek(self,offset):
         """
@@ -480,7 +493,7 @@ class HadoopFile:
         else:
             current_position = self.tell()
             i = min(0,current_position-offset)
-        ret = pyhdfs.hdfsSeek(self.hdfs,self.filehandle,i)
+        ret = hdfs4py.hdfsSeek(self.hdfs,self.filehandle,i)
         if ret<0:
             raise IOError 
                                                                                         
@@ -492,7 +505,7 @@ class HadoopFile:
             @return: Current offset, -1 on error. 
             
         """
-        return pyhdfs.hdfsTell(self.hdfs,self.filehandle)
+        return hdfs4py.hdfsTell(self.hdfs,self.filehandle)
 
     def available(self):
         """
@@ -501,4 +514,4 @@ class HadoopFile:
             @rtype: int
             @return: Returns available bytes; -1 on error. 
         """
-        return pyhdfs.hdfsAvailable(self.hdfs,self.filehandle)
+        return hdfs4py.hdfsAvailable(self.hdfs,self.filehandle)
