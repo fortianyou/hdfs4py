@@ -58,6 +58,39 @@
 //typemap
 }
 
+%typemap(out) hdfsFileInfo * hdfsGetPathInfo {
+
+    //typemap
+    PyObject *di = PyDict_New();
+    PyObject *mName = PyString_FromString(result->mName);
+    PyDict_SetItemString(di,"mName",mName);
+    PyObject *mSize = PyInt_FromLong(result->mSize);
+    PyDict_SetItemString(di,"mSize",mSize);
+    PyObject *mReplication = PyInt_FromLong(result->mReplication);
+    PyDict_SetItemString(di,"mReplication",mReplication);
+    PyObject *mBlockSize = PyInt_FromLong(result->mBlockSize);
+    PyDict_SetItemString(di,"mBlockSize",mBlockSize);
+    PyObject *mOwner = PyString_FromString(result->mOwner);
+    PyDict_SetItemString(di,"mOwner",mOwner);
+    PyObject *mGroup = PyString_FromString(result->mGroup);
+    PyDict_SetItemString(di,"mGroup",mGroup);
+    PyObject *mLastMod = PyInt_FromLong(result->mLastMod);
+    PyDict_SetItemString(di,"mLastMod",mLastMod);
+    PyObject *mLastAccess = PyInt_FromLong(result->mLastAccess);
+    PyDict_SetItemString(di,"mLastAccess",mLastAccess);
+    tObjectKind mKind = result->mKind;
+    if(mKind=='D')
+    {
+         PyDict_SetItemString(di,"mKind",PyString_FromString("Directory"));
+    }else if(mKind=='F')
+    {
+         PyDict_SetItemString(di,"mKind",PyString_FromString("File"));
+    }
+                
+    $result = di;
+    //typemap
+}
+
 %typemap(in) ( char  *buffer, size_t bufferSize) {
 //typemap
     if (!PyInt_Check($input) ) {

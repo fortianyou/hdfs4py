@@ -228,7 +228,7 @@ class HadoopDFS:
             @param path: The path of the directory. 
 
             @rtype: list
-            @return: Return a list contained all files in given directory on succrss, or the length of list is zero.
+            @return: Return a list contained all files in given directory on success, or the length of list is zero.
         """
         if self.pathExists(path) == -1 :
             return -1
@@ -376,11 +376,8 @@ class HadoopFile:
         """
             Read data from an open file. 
 
-            @type len: int
-            @param len: The length of the buffer for storing data.
-
-            @rtype: string
-            @return: Returns the data string in tht HDFS file , or raise some Exceptions
+            @param buffsize: The length of the buffer for storing data.
+            @return: 
             
             >>> import hadoop
             >>> cluster = hadoop.HadoopDFS("ns-lsp","lsptest","hadoop ugi",64310)
@@ -399,9 +396,7 @@ class HadoopFile:
         except IOError,e:
             if file_content==None:
                 raise
-        import numpy as np
-        arr = np.asarray( buf )
-        print "arr "+ str( arr )
+
         return [nbytes, hdfs4py.cdata_buffer(buf, nbytes)]
 
     def close(self):

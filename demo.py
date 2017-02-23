@@ -9,21 +9,23 @@
 """
 import hdfs4py
 import hadoop
+import math
 import gc
 
 __revision__ = '0.1'
 
 
 if __name__ == "__main__" :
-
     
     fs = hadoop.HadoopDFS("10.141.105.109",9000)
     print fs.getWorkingDirectory()
     print fs.setWorkingDirectory("/user/roger")
     print fs.getWorkingDirectory()
-    print fs.listDirectory("/user/test")
-    #file = fs.getPathInfo("/user/test")
-    #print file.mLastMod,type(file.mLastMod)
+    print fs.listDirectory("/user/convDSSM/data-00000")
+    file = fs.getPathInfo("/user/convDSSM/data-00000")
+    print file["mSize"]
+    print file["mBlockSize"]
+    print math.ceil(float(file["mSize"]) / file["mBlockSize"])
     #server.setReplication("/user/ns-lsp/logs/cjj/a",3)
     #file = server.getPathInfo("/user/ns-lsp/logs/cjj/a")
     #print file.mReplication
@@ -36,10 +38,20 @@ if __name__ == "__main__" :
     #hf = hadoop.HadoopFile(fs,'/user/test/pyhdfs_test.txt', is_read=False)
     #hf.write("pyhdfs, hello world")
     #hf.close()
-    #hf = hadoop.HadoopFile(fs, '/user/test/pyhdfs_test.txt',  is_read=True)
-    #[nbytes, sres ] = hf.read(10)
-    #print sres 
-    #hf.seek(2)
+    hf = hadoop.HadoopFile(fs, '/user/classifation/train_23class.txt',  is_read=True)
+    [nbytes, sres1 ] = hf.read(64)
+    hf.seek(64)
+    [nbytes, sres2 ] = hf.read(64)
+    sres0 = sres1 + sres2
+    print sres0
+
+    hf.seek(0)
+    [nbytes, sres ] = hf.read(128)
+    print sres
+
+    print str(sres0 == sres)
+
+   #hf.seek(2)
     #print hf.read()[1].strip()
 
     #print hf.tell()
