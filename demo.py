@@ -1,13 +1,12 @@
 #! /usr/bin/env python
 #  -*- coding: utf-8 -*-
-#  Author : vbarter
-#  Mail   : yzcaijunjie@gmail.com
+#  Author : fortianyou
+#  Mail   : fortianyou@gmail.com
 
 
 """
 
 """
-import hdfs4py
 import hadoop
 import math
 import gc
@@ -38,19 +37,13 @@ if __name__ == "__main__" :
     #hf = hadoop.HadoopFile(fs,'/user/test/pyhdfs_test.txt', is_read=False)
     #hf.write("pyhdfs, hello world")
     #hf.close()
-    hf = hadoop.HadoopFile(fs, '/user/classifation/train_23class.txt',  is_read=True)
-    [nbytes, sres1 ] = hf.read(64)
-    hf.seek(64)
-    [nbytes, sres2 ] = hf.read(64)
-    sres0 = sres1 + sres2
-    print sres0
-
-    hf.seek(0)
-    [nbytes, sres ] = hf.read(128)
+    hf = hadoop.HadoopFile(fs, 'hdfs://10.141.105.109:9000/user/classifation/train_23class.txt', is_read=True)
+    hadoop.HadoopFile(fs,'hdfs://10.141.105.109:9000/user/classifation/train_23class.txt', is_read=True)
+    [nbytes, sres ] = hf.read(134217728)
+    print nbytes
+    print len(sres)
     print sres
-
-    print str(sres0 == sres)
-
+    #print hf.getPathInfo()
    #hf.seek(2)
     #print hf.read()[1].strip()
 
@@ -77,9 +70,11 @@ if __name__ == "__main__" :
    # fh = hadoop.HadoopFile(fs,'/user/ns-lsp/logs/cjj/a',True)
    # print "end... : ",fh.read()
     #fh.close()
-    fs.disconnect()
-
     gc.collect()
+
+    #import time
+    #time.sleep(100)
+
 
 
 
